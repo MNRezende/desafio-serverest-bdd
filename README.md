@@ -2,21 +2,23 @@
 
 Este projeto reúne testes automatizados para a interface e para a API da plataforma ServeRest, com abordagem BDD em Gherkin e uma estrutura pensada para manutenção, clareza e apresentação profissional.
 
-## � Visão geral
+## 📌 Visão geral
 
 A solução foi organizada para demonstrar boas práticas de automação, incluindo:
 - cobertura de cenários positivos e de exceção
 - separação por camadas de UI, API e suporte
 - geração de evidências visuais e relatórios executáveis
+- integração contínua com GitHub Actions
+- suporte a ambientes e retry de execução
 
 ## ✅ Resultado alcançado
 
 A suíte foi validada com sucesso na execução completa, com:
 - 6 specs executados
-- 12 testes passando
+- 13 testes passando
 - 0 falhas
 
-## �🏗️ Estrutura do projeto
+## 🏗️ Estrutura do projeto
 
 ```text
 cypress/
@@ -37,6 +39,8 @@ cypress/
 - Hooks para limpar sessão entre cenários
 - Fixtures para centralizar dados de teste
 - Relatório HTML com screenshots automáticos
+- Workflow de CI no GitHub Actions
+- Configuração de retries e ambiente
 
 ## ▶️ Como executar
 
@@ -64,13 +68,19 @@ npm run cy:run:ui
 npm run cy:run:api
 ```
 
-5. Execute com relatório HTML e screenshots:
+5. Execute em modo CI:
+
+```bash
+npm run cy:run:ci
+```
+
+6. Execute com relatório HTML e screenshots:
 
 ```bash
 npm run cy:run:all:report
 ```
 
-6. Abra o runner visual:
+7. Abra o runner visual:
 
 ```bash
 npx cypress open
@@ -87,6 +97,7 @@ npx cypress open
 - Os dados dinâmicos são gerados automaticamente para evitar conflitos.
 - Os cenários usam fixtures para centralizar valores base.
 - O estado de sessão é resetado antes e depois dos cenários.
+- O ambiente pode ser ajustado via variável de ambiente ou arquivo [cypress.env.json](cypress.env.json).
 
 ## 🧠 Por que este projeto é interessante para avaliação
 
@@ -94,7 +105,4 @@ npx cypress open
 - evidencia entendimento de cenários de sucesso e falha
 - demonstra preocupação com evidências e rastreabilidade
 - apresenta uma base pronta para evolução em um ambiente real
-
-- Os dados dinâmicos são gerados automaticamente para evitar conflitos.
-- Os cenários usam fixtures para centralizar valores base.
-- O estado de sessão é resetado antes e depois dos cenários.
+- reforça maturidade com CI, retries e configuração de ambiente
