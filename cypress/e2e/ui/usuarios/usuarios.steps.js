@@ -1,37 +1,37 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import loginPage from "../../../page_objects/login.page.js";
-import cadastroPage from "../../../page_objects/cadastro.page.js";
 import usuariosPage from "../../../page_objects/usuarios.page.js";
+import { createPassword, createUniqueEmail, createUniqueName } from "../../../support/helpers.js";
 
 let emailUsuarioDinamico;
 let nomeUsuarioDinamico;
 
 Given("I log in with valid administrator credentials for user management", () => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    nomeUsuarioDinamico = createUniqueName('Miguel Listagem');
+    emailUsuarioDinamico = createUniqueEmail('list_user');
+    const senhaUsuario = createPassword();
 
-    nomeUsuarioDinamico = `Miguel Listagem ${Date.now()}`;
-    emailUsuarioDinamico = `list_user_${Date.now()}@desafio.com`;
-    const senhaUsuario = 'Senha@123';
-
-    cadastroPage.navegar();
-    cadastroPage.cadastrarUsuario(nomeUsuarioDinamico, emailUsuarioDinamico, senhaUsuario, true);
-
-    cy.clearCookies();
-    cy.clearLocalStorage();
-    cy.visit('/');
-    loginPage.realizarLogin(emailUsuarioDinamico, senhaUsuario);
+    cy.resetSession();
+    cy.registerUser(nomeUsuarioDinamico, emailUsuarioDinamico, senhaUsuario, true);
+    cy.resetSession();
+    cy.loginAsAdmin(emailUsuarioDinamico, senhaUsuario);
 });
 
 When("I navigate to the user management list", () => {
+    usuariosPage.navegarParaListagem();
+    usuariosPage.validarPaginaListagem();
+});
 
-    cy.get(usuariosPage.btnIrParaListagem).click();
-    cy.url().should("include", "/listarusuarios");
+When("I attempt to access the user management list without a valid session", () => {
+    cy.resetSession();
+    cy.visit('/listarusuarios');
 });
 
 Then("I should see the registered user displayed in the table", () => {
-    cy.get(usuariosPage.tabelaUsuarios)
-        .should("be.visible")
-        .and("contain.text", nomeUsuarioDinamico)
-        .and("contain.text", emailUsuarioDinamico);
+    usuariosPage.validarUsuarioNaTabela();
+});
+
+Then("the system should keep me on the user list page", () => {
+    const routes = Cypress.env('envConfig').ui.routes;
+    cy.url().should('include', routes.users);
+    usuariosPage.validarPaginaListagem();
 });

@@ -1,0 +1,16 @@
+{
+  "user": {
+    "name": "Usuário Padrão",
+    "password": "Senha@123",
+    "existingEmail": "fulano@qa.com"
+  },
+  "product": {
+    "name": "Produto Base",
+    "price": 500,
+    "description": "Descrição gerada via automação de API",
+    "quantity": 10
+  },
+  "login": {
+    "invalidPassword": "SenhaIncorreta123"
+  }
+}

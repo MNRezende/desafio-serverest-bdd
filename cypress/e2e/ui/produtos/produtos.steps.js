@@ -1,44 +1,50 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import loginPage from "../../../page_objects/login.page.js";
-import cadastroPage from "../../../page_objects/cadastro.page.js";
 import produtosPage from "../../../page_objects/produtos.page.js";
+import { createPassword, createUniqueEmail, createUniqueName, getFixtureData } from "../../../support/helpers.js";
 
 let nomeProdutoDinamico;
 
 Given("I log in with valid administrator credentials", () => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    const emailAdminProdutos = createUniqueEmail('admin_prod');
+    const senhaAdminProdutos = createPassword();
 
-    const emailAdminProdutos = `admin_prod_${Date.now()}@desafio.com`;
-    const senhaAdminProdutos = 'Senha@123';
-
-    cadastroPage.navegar();
-    cadastroPage.cadastrarUsuario('Miguel Admin Produtos', emailAdminProdutos, senhaAdminProdutos, true);
-
-    cy.visit('/');
-    loginPage.realizarLogin(emailAdminProdutos, senhaAdminProdutos);
+    cy.resetSession();
+    cy.registerUser('Miguel Admin Produtos', emailAdminProdutos, senhaAdminProdutos, true);
+    cy.loginAsAdmin(emailAdminProdutos, senhaAdminProdutos);
 });
 
 Given("I navigate to the product registration page", () => {
-    cy.get(produtosPage.btnIrParaCadastro).click();
-    cy.url().should("include", "/cadastrarprodutos");
+    produtosPage.navegarParaCadastro();
+    produtosPage.validarPaginaCadastro();
 });
 
 When("I register a new product with the following details:", (dataTable) => {
-    const dados = dataTable.hashes()[0];
-    nomeProdutoDinamico = `${dados.name} ${Date.now()}`;
+    getFixtureData('product').then((dadosBase) => {
+        const dados = dataTable.hashes()[0];
+        nomeProdutoDinamico = createUniqueName(dados.name || dadosBase.name || 'Produto');
 
-    produtosPage.cadastrarNovoProduto(
-        nomeProdutoDinamico,
-        dados.price,
-        dados.description,
-        dados.quantity
-    );
+        produtosPage.cadastrarNovoProduto(
+            nomeProdutoDinamico,
+            dados.price || dadosBase.price,
+            dados.description || dadosBase.description,
+            dados.quantity || dadosBase.quantity
+        );
+    });
+});
+
+When("I try to access the product registration page without a valid session", () => {
+    cy.resetSession();
+    cy.visit('/cadastrarprodutos');
 });
 
 Then("the product should be visible in the inventory list", () => {
-    cy.url().should("include", "/listarprodutos");
-    cy.get(produtosPage.tabelaProdutos)
-        .should("be.visible")
-        .and("contain.text", nomeProdutoDinamico);
+    const routes = Cypress.env('envConfig').ui.routes;
+    cy.url().should("include", routes.productList);
+    produtosPage.validarProdutoNaLista(nomeProdutoDinamico);
+});
+
+Then("the system should keep me on the product registration page", () => {
+    const routes = Cypress.env('envConfig').ui.routes;
+    cy.url().should('include', routes.products);
+    produtosPage.validarPaginaCadastro();
 });

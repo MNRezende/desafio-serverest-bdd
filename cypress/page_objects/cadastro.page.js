@@ -10,6 +10,7 @@ class CadastroPage {
   }
 
   cadastrarUsuario(nome, email, senha, isAdmin = false) {
+    this.navegar();
     cy.get(this.inputNome).type(nome);
     cy.get(this.inputEmail).type(email);
     cy.get(this.inputSenha).type(senha);

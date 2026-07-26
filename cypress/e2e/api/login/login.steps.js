@@ -1,12 +1,13 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import usuariosService from "../../../services/usuarios.service.js";
 import loginService from "../../../services/login.service.js";
+import { createPassword, createUniqueEmail } from "../../../support/helpers.js";
 
 let responseContext;
 
 Given("an existing user registered for authentication", () => {
-    const emailDinamico = `login_api_${Date.now()}@desafio.com`;
-    const senhaDinamica = "Senha@123";
+    const emailDinamico = createUniqueEmail('login_api');
+    const senhaDinamica = createPassword();
 
     Cypress.env("loginEmail", emailDinamico);
     Cypress.env("loginSenha", senhaDinamica);
@@ -16,11 +17,8 @@ Given("an existing user registered for authentication", () => {
 });
 
 When("I send a POST request to log in with these credentials", () => {
-
     cy.get("@cadastroRequisicao").then((cadastroRes) => {
-
         expect(cadastroRes.status).to.eq(201);
-
 
         const email = Cypress.env("loginEmail");
         const senha = Cypress.env("loginSenha");

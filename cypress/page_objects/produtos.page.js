@@ -8,6 +8,14 @@ class ProdutosPage {
   get btnIrParaCadastro() { return '[data-testid="cadastrarProdutos"]'; }
   get tabelaProdutos() { return '.table'; }
 
+  navegarParaCadastro() {
+    cy.get(this.btnIrParaCadastro).click();
+  }
+
+  validarPaginaCadastro() {
+    cy.url().should('include', '/cadastrarprodutos');
+  }
+
   cadastrarNovoProduto(nome, preco, description, quantidade) {
     cy.get(this.inputNome).type(nome);
     cy.get(this.inputPreco).type(preco);
@@ -21,6 +29,12 @@ class ProdutosPage {
     });
 
     cy.get(this.btnCadastrar).click();
+  }
+
+  validarProdutoNaLista(nomeProduto) {
+    cy.get(this.tabelaProdutos)
+      .should('be.visible')
+      .and('contain.text', nomeProduto);
   }
 }
 

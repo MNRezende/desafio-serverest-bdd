@@ -1,74 +1,100 @@
 # 🧪 Projeto de Automação Híbrida (UI & API) com Cypress + Cucumber
 
-Este projeto contém uma esteira completa de testes automatizados cobrindo tanto a interface gráfica (Front-end) quanto os endpoints de serviços (API/Back-end) da plataforma **ServeRest**, utilizando **Cypress** e a abordagem **BDD (Behavior-Driven Development)** com Gherkin/Cucumber.
+Este projeto reúne testes automatizados para a interface e para a API da plataforma ServeRest, com abordagem BDD em Gherkin e uma estrutura pensada para manutenção, clareza e apresentação profissional.
 
-## 🚀 Arquitetura e Organização do Projeto
+## � Visão geral
 
-O projeto foi estruturado utilizando boas práticas de desenvolvimento, aplicando o padrão **Page Objects** para os testes de interface e **Service Objects** para o isolamento de requisições HTTP da API.
+A solução foi organizada para demonstrar boas práticas de automação, incluindo:
+- cobertura de cenários positivos e de exceção
+- separação por camadas de UI, API e suporte
+- geração de evidências visuais e relatórios executáveis
+
+## ✅ Resultado alcançado
+
+A suíte foi validada com sucesso na execução completa, com:
+- 6 specs executados
+- 12 testes passando
+- 0 falhas
+
+## �🏗️ Estrutura do projeto
 
 ```text
 cypress/
-├── e2e/
-│   ├── api/                # Cenários de testes de API (.feature e .steps.js)
-│   │   ├── login/
-│   │   ├── produtos/
-│   │   └── usuarios/
-│   └── ui/                 # Cenários de testes de Front-end (Interface)
-│       ├── login/
-│       └── ...
-├── page_objects/           # Elementos e ações das telas do Front-end
-└── services/               # Camada de requisições HTTP (Service Objects) para a API
+├── e2e/                # Features e step definitions
+├── fixtures/           # Dados base para os cenários
+├── page_objects/       # Camada de interação com a UI
+├── services/           # Camada de requisições de API
+├── support/            # Comandos, hooks e utilidades
+└── reports/            # Relatórios HTML gerados após execução
+```
 
----
+## ✅ O que foi aplicado
 
-🛠️ Tecnologias Utilizadas
-○ Cypress (v13+) - Framework de testes ponta a ponta.
-○ @badeball/cypress-cucumber-preprocessor - Integração e execução de cenários em Gherkin.
-○ Webpack - Pré-processador para empacotamento dos arquivos de testes.
-○ JavaScript (ES6+) - Linguagem utilizada para a escrita dos scripts.
+- Page Objects para interface
+- Service Objects para API
+- Helpers para criar dados únicos
+- Comandos reutilizáveis para ações comuns
+- Hooks para limpar sessão entre cenários
+- Fixtures para centralizar dados de teste
+- Relatório HTML com screenshots automáticos
 
----
+## ▶️ Como executar
 
-⚙️ Configuração Multi-Ambiente
-As URLs de execução foram centralizadas de forma inteligente no arquivo cypress.config.js para evitar duplicação de código (DRY), separando os escopos de ambiente de forma transparente para o Cypress:
+1. Instale as dependências:
 
-○ Base URL (Front-end): https://front.serverest.dev
+```bash
+npm install
+```
 
-○ API URL (Back-end): https://serverest.dev (injetada via variáveis de ambiente Cypress.env)
-
----
-
-🏃💨 Como Rodar os Testes
-
-○ Certifique-se de ter as dependências instaladas rodando npm install. No arquivo package.json, configuramos três scripts dedicados para facilitar a execução da esteira:
-
-🌟 1. Rodar a Esteira Completa (UI + API)
-Executa de forma sequencial todos os cenários de teste mapeados no projeto:
+2. Execute a suíte completa:
 
 ```bash
 npm run cy:run:all
 ```
 
-💻 2. Rodar Apenas os Testes de Front-end (UI)
-Foca exclusivamente na validação de comportamento e fluxos da interface do usuário:
+3. Execute apenas UI:
 
 ```bash
 npm run cy:run:ui
 ```
 
-🔌 3. Rodar Apenas os Testes de API (Back-end)
-Dispara testes rápidos e isolados diretamente nos endpoints, garantindo independência de massa de dados através de geração dinâmica de payloads:
+4. Execute apenas API:
 
 ```bash
 npm run cy:run:api
 ```
 
-🖥️ 4. Abrir no Modo Visual (Cypress Runner)
-Caso queira acompanhar a execução pelo painel interativo do Cypress:
+5. Execute com relatório HTML e screenshots:
+
+```bash
+npm run cy:run:all:report
+```
+
+6. Abra o runner visual:
 
 ```bash
 npx cypress open
 ```
----
 
-Desenvolvido com foco em qualidade e engenharia de software de alta performance. 🚀
+## 📊 Relatórios e evidências
+
+- O relatório HTML é gerado em [cypress/reports](cypress/reports)
+- Screenshots são salvos em [cypress/screenshots](cypress/screenshots)
+- Em caso de falha, o Cypress registra automaticamente a evidência visual
+
+## 🔧 Observações técnicas
+
+- Os dados dinâmicos são gerados automaticamente para evitar conflitos.
+- Os cenários usam fixtures para centralizar valores base.
+- O estado de sessão é resetado antes e depois dos cenários.
+
+## 🧠 Por que este projeto é interessante para avaliação
+
+- mostra capacidade de estruturar automação de forma organizada
+- evidencia entendimento de cenários de sucesso e falha
+- demonstra preocupação com evidências e rastreabilidade
+- apresenta uma base pronta para evolução em um ambiente real
+
+- Os dados dinâmicos são gerados automaticamente para evitar conflitos.
+- Os cenários usam fixtures para centralizar valores base.
+- O estado de sessão é resetado antes e depois dos cenários.
